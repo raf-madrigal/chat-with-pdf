@@ -29,16 +29,16 @@ from prompts.general_prompts import stuff_documents
 
 class LCELConversationalRetrieverChain():
 
-    def __init__(self, llm, retriever, memory, condense_llm=None, answer_llm=None, condense_prompt=None, answer_prompt=None):
+    def __init__(self, llm, retriever, memory, **kwargs):
     
         self.memory = memory
         self.retriever=retriever
         self.llm = llm
-        self.condense_llm = condense_llm if condense_llm else llm
-        self.answer_llm = answer_llm if answer_llm else llm 
-        self.condense_prompt = condense_prompt if condense_prompt else CONDENSE_QUESTION_PROMPT
-        self.answer_prompt = answer_prompt if answer_prompt else ZERO_SHOT_PROMPT
-        
+        self.condense_llm = kwargs.get('condense_llm', llm)
+        self.answer_llm = kwargs.get('answer_llm', llm) 
+        self.condense_prompt = kwargs.get('condense_prompt',  CONDENSE_QUESTION_PROMPT)
+        self.answer_prompt = kwargs.get('answer_prompt', ZERO_SHOT_PROMPT)
+        # print(kwar)
 
         
     def _get_chat_history_chain(self, memory):
@@ -53,8 +53,6 @@ class LCELConversationalRetrieverChain():
         return get_chat_history
     
     def _get_standalone_query_chain(self, llm):
-
-        
 
         standalone_query_chain = RunnablePassthrough.assign(
             standalone_question = (
@@ -83,7 +81,7 @@ class LCELConversationalRetrieverChain():
         return answer_chain
     
     def build_chain(self):
-        self.chain =  (self._get_chat_history_chain(self.memory) 
+        self.chain =  (self._get_chat_history_chain(self.memory)
                 | self._get_standalone_query_chain(self.condense_llm) 
                 | self._get_retriever_chain(self.retriever)
                 | self._get_answer_chain(self.answer_llm)
@@ -99,13 +97,12 @@ class LCELBaseChatbot():
 
         self.memory_window = kwargs.get('memory_window', 5)
         self.vectordb = vectordb
-        self.llm = llm
+        self.llm = llm 
         
         self.message_history = kwargs.get('message_history', None)
-        if self.message_history:
+        if self.message_history is not None:
             self.chat_history = self.load_conversation_history_from_database(self.message_history)
         else:
-
             self.chat_history = ChatMessageHistory()
 
 
@@ -141,6 +138,7 @@ class LCELBaseChatbot():
 
         vectordb = self.vectordb
         memory = self.load_memory_with_history()
+        # print(memory, type(memory))
         self.memory = memory
         llm = self.llm
 

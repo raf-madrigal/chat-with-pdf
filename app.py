@@ -11,7 +11,7 @@ from prompts.mistral_prompts import ZERO_SHOT_PROMPT as mistral_answer_prompt
 from prompts.openai_prompts import CONDENSE_QUESTION_PROMPT as oai_condense_prompt
 from prompts.openai_prompts import ZERO_SHOT_PROMPT as oai_answer_prompt
 
-# load_dotenv()
+load_dotenv()
 
 mistral_llm = HuggingFaceEndpoint(
             repo_id='mistralai/Mistral-7B-Instruct-v0.2',
@@ -24,12 +24,12 @@ mistral_llm = HuggingFaceEndpoint(
 oai_llm = ChatOpenAI(temperature=0, 
                     model='gpt-3.5-turbo',
                     openai_api_key=st.secrets['OPENAI_API_KEY'], 
-                    openai_organization=st.secrets['OPENAI_ORGANIZATION']), 
+                    openai_organization=st.secrets['OPENAI_ORGANIZATION']) 
 
 oai4_llm = ChatOpenAI(temperature=0, 
                     model='gpt-4',
                     openai_api_key=st.secrets['OPENAI_API_KEY'], 
-                    openai_organization=st.secrets['OPENAI_ORGANIZATION']), 
+                    openai_organization=st.secrets['OPENAI_ORGANIZATION']),
 
 LLM_DICT = {
     'Mistral-7B-Instruct-v0.2' : mistral_llm,
@@ -88,13 +88,13 @@ if uploaded_file :
         # vector_db = load_vector_store()
 
     
-    if 'messages' not in st.session_state.keys():
+    if 'messages' not in st.session_state:
         st.session_state['messages'] = []
         st.session_state.messages.append({"role": "assistant", "content": 'Hi there! If you wanna chat, please Upload a PDF on the left pane (Otherwise I might give an error!)'})
-
+    # print(st.session_state.messages)
     
     bot = LCELBaseChatbot(llm=LLM_DICT[llm_choice], vectordb=vector_db, message_history=st.session_state.messages)
-    
+    # print(PROMPTS_DICT[llm_choice])
     bot.initialize(**PROMPTS_DICT[llm_choice])
     
 
