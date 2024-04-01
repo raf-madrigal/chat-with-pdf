@@ -18,7 +18,7 @@ mistral_llm = HuggingFaceEndpoint(
             temperature=0.001,
             max_new_tokens=250, 
             repetition_penalty=1.1,
-            token=st.secrets['HUGGINGFACEHUB_API_TOKEN']
+            huggingfacehub_api_token=st.secrets['HUGGINGFACEHUB_API_TOKEN']
         )
 
 oai_llm = ChatOpenAI(temperature=0, 

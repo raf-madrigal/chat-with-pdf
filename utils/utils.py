@@ -1,10 +1,10 @@
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain.document_loaders import PyMuPDFLoader
+from langchain_community.document_loaders import PyMuPDFLoader
 from langchain_community.llms import HuggingFaceEndpoint
 from dotenv import load_dotenv
 
-from langchain.vectorstores import Annoy
+from langchain_community.vectorstores import Annoy
 
 load_dotenv()
     
