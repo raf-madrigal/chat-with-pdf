@@ -4,19 +4,37 @@ import tempfile
 from langchain_openai import ChatOpenAI
 import streamlit as st
 from dotenv import load_dotenv
-from streamlit_chat import message
 
+from langchain_community.llms import HuggingFaceEndpoint
 from prompts.mistral_prompts import CONDENSE_QUESTION_PROMPT as mistral_condense_prompt
 from prompts.mistral_prompts import ZERO_SHOT_PROMPT as mistral_answer_prompt
 from prompts.openai_prompts import CONDENSE_QUESTION_PROMPT as oai_condense_prompt
 from prompts.openai_prompts import ZERO_SHOT_PROMPT as oai_answer_prompt
 
-load_dotenv()
+# load_dotenv()
+
+mistral_llm = HuggingFaceEndpoint(
+            repo_id='mistralai/Mistral-7B-Instruct-v0.2',
+            temperature=0.001,
+            max_new_tokens=250, 
+            repetition_penalty=1.1,
+            token=st.secrets['HUGGINGFACEHUB_API_TOKEN']
+        )
+
+oai_llm = ChatOpenAI(temperature=0, 
+                    model='gpt-3.5-turbo',
+                    openai_api_key=st.secrets['OPENAI_API_KEY'], 
+                    openai_organization=st.secrets['OPENAI_ORGANIZATION']), 
+
+oai4_llm = ChatOpenAI(temperature=0, 
+                    model='gpt-4',
+                    openai_api_key=st.secrets['OPENAI_API_KEY'], 
+                    openai_organization=st.secrets['OPENAI_ORGANIZATION']), 
 
 LLM_DICT = {
-    'Mistral-7B-Instruct-v0.2' : get_hf_llm('mistralai/Mistral-7B-Instruct-v0.2', temperature=0.001, repetition_penalty=1.1),
-    'OpenAI (gpt-3.5-turbo)' : ChatOpenAI(temperature=0, model='gpt-3.5-turbo'), 
-    'OpenAI (gpt-4)' : ChatOpenAI(temperature=0, model='gpt-4')
+    'Mistral-7B-Instruct-v0.2' : mistral_llm,
+    'OpenAI (gpt-3.5-turbo)' : oai_llm,
+    'OpenAI (gpt-4)' : oai4_llm
 }
 
 LLM_DESCRIPTION_DICT = {

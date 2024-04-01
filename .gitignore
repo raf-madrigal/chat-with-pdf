@@ -1,4 +1,5 @@
 
+
 config.txt
 .ipynb_checkpoints
 __pycache__
@@ -107,7 +108,10 @@ ENV/
 env.bak/
 venv.bak/
 
-
-
 # VSCode
 .vscode
+
+
+# Streamlit 
+.streamlit
+.streamlit/*
