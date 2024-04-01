@@ -1,5 +1,7 @@
 # Chat with PDF using Retrieval Augmented Generation (RAG)
 
+> demo link: https://raf-madrigal-chat-with-pdf.streamlit.app/
+
 ### Summary:
 We show a methodology to allow users to utilize Large Language Models to improve information processing and comprehension from a PDF file
 
