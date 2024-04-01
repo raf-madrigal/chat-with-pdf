@@ -4,7 +4,7 @@ config.txt
 __pycache__
 *Zone.Identifier
 .conda
-
+*/__pycache/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
