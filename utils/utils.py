@@ -7,7 +7,37 @@ from dotenv import load_dotenv
 from langchain_community.vectorstores import Annoy
 
 load_dotenv()
+
+def load_and_split_documents(tmp_file_path):
+
+    loader = PyMuPDFLoader(file_path=tmp_file_path)
+    docs = loader.load()
+    text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
+        chunk_size=400, 
+        chunk_overlap=20, 
+        separators=["\n\n", "\n", "\.", " ", ""]
+    )
+    splits = text_splitter.split_documents(docs) # List of Documents
+    return splits
+
+def store_documents(splits, embeddings=None, verbose=True):
+    VECTORSTORE_SAVE_PATH = 'vectorstore/db_annoy'
+    if not embeddings:
+        embeddings = HuggingFaceEmbeddings(model_name='sentence-transformers/all-MiniLM-L6-v2') 
     
+    vector_db = Annoy.from_documents(
+                splits,
+                embeddings,
+            )
+    
+    vector_db.save_local(VECTORSTORE_SAVE_PATH)
+
+    if verbose:
+        print(f"Documents saved to {VECTORSTORE_SAVE_PATH}")
+
+    return vector_db
+
+
 def load_and_store_file(tmp_file_path, embeddings=None, verbose=True):
 
     
