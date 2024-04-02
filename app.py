@@ -112,6 +112,8 @@ def main():
         st.session_state['vector_db'] = []
     if 'llm' not in st.session_state.keys():
         st.session_state['llm'] = []
+    if 'prompts' not in st.session_state.keys():
+        st.session_state['prompts'] = []
     if 'messages' not in st.session_state.keys():
 
         st.session_state['messages'] = []
