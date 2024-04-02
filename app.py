@@ -84,21 +84,26 @@ def load_files():
         
             splits_i = load_and_split_documents(tmp_file_path) 
             splits += splits_i
-
-    st.session_state['vector_db'] = store_documents(splits)
-    print('VectorDB loaded')
+    if 'vector_db' not in st.session_state.keys():
+        st.session_state['vector_db'] = []
+    else: 
+        st.session_state['vector_db'] = store_documents(splits)
+    # print('VectorDB loaded')
     
     
 
 
 def llm_selector():
+    if 'llm' not in st.session_state.keys():
+        st.session_state['llm'] = []
+        st.session_state['prompts'] = []
+    else:
+        st.session_state['llm'] = GLOBAL_LLM_MODELS[st.session_state['model_choice']]
+        st.session_state['llm_description'] = LLM_DESCRIPTIONS[st.session_state['model_choice']]
+        st.session_state['llm_disclaimer'] = LLM_DISCLAIMERS[st.session_state['model_choice']]
+        st.session_state['prompts'] = CHAIN_PROMPTS[st.session_state['model_choice']]
 
-    st.session_state['llm'] = GLOBAL_LLM_MODELS[st.session_state['model_choice']]
-    st.session_state['llm_description'] = LLM_DESCRIPTIONS[st.session_state['model_choice']]
-    st.session_state['llm_disclaimer'] = LLM_DISCLAIMERS[st.session_state['model_choice']]
-    st.session_state['prompts'] = CHAIN_PROMPTS[st.session_state['model_choice']]
-
-    st.markdown('Note: If you want to change the LLM mid-conversation, please click "Process PDFs!" again to load the proper LLM prompts')
+        st.markdown('Note: If you want to change the LLM mid-conversation, please click "Process PDFs!" again to load the proper LLM prompts')
     
 
 # def initialize_session_states():
@@ -108,14 +113,12 @@ def llm_selector():
 #     # st.session_state['chain'] = None
 
 def main():
-    if 'vector_db' not in st.session_state.keys():
-        st.session_state['vector_db'] = []
-    if 'llm' not in st.session_state.keys():
-        st.session_state['llm'] = []
-    if 'prompts' not in st.session_state.keys():
-        st.session_state['prompts'] = []
+    
+    # if 'llm' not in st.session_state.keys():
+    #     st.session_state['llm'] = []
+    # if 'prompts' not in st.session_state.keys():
+    #     st.session_state['prompts'] = {}
     if 'messages' not in st.session_state.keys():
-
         st.session_state['messages'] = []
         st.session_state.messages.append({"role": "assistant", "content": 'Hi there! If you wanna chat, please Upload a PDF on the left pane (Otherwise I might give an error!)'})
     
@@ -129,7 +132,7 @@ def main():
         st.markdown('## 1. Choose an LLM model to Chat with')
         st.selectbox('Select the backend Large Language Model to use:', 
                                 ('OpenAI (gpt-3.5-turbo)', 'OpenAI (gpt-4)', 'Mistral-7B-Instruct-v0.2'), 
-                                on_change=llm_selector, key='model_choice')
+                                 on_change=llm_selector, key='model_choice')
 
         st.markdown('## 2. Upload PDF/s')
 
@@ -138,11 +141,14 @@ def main():
             type='pdf', 
             accept_multiple_files=True, 
             key='pdfs', 
+            
         )
 
         st.markdown('## 3. Click Process PDFs')
         if st.button('Process PDFs!'):
             load_files()
+
+        
 
             if (st.session_state['chain'] is not None) and (st.session_state['llm'] is not None):
                 st.markdown('Processing Done! LLM Fully Loaded!')
