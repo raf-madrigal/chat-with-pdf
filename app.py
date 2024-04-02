@@ -103,12 +103,13 @@ def llm_selector():
 
 # def initialize_session_states():
     
-#     # st.session_state['vector_db'] = None
+    # st.session_state['vector_db'] = None
 #     # st.session_state['pdfs'] = []
 #     # st.session_state['chain'] = None
 
 def main():
-
+    if 'vector_db' not in st.session_state.keys():
+        st.session_state['vector_db'] = []
     if 'messages' not in st.session_state.keys():
 
         st.session_state['messages'] = []
