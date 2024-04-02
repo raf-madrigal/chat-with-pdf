@@ -110,6 +110,8 @@ def llm_selector():
 def main():
     if 'vector_db' not in st.session_state.keys():
         st.session_state['vector_db'] = []
+    if 'llm' not in st.session_state.keys():
+        st.session_state['llm'] = []
     if 'messages' not in st.session_state.keys():
 
         st.session_state['messages'] = []
