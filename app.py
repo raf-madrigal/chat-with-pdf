@@ -104,7 +104,7 @@ def llm_selector():
     # st.session_state['chain_loaded'] = False
     print( st.session_state['model_choice'],   st.session_state['llm'], st.session_state['llm_disclaimer'])
     st.session_state['llm_selected'] = True
-    st.session_state.messages.append({"role": "assistant", 
+    st.session_state.messages.append({"role": "system", 
                                       "content": f'Notice: You selected {st.session_state["model_choice"]} as an LLM'}
                                       )
     

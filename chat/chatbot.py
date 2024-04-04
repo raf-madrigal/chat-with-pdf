@@ -111,7 +111,6 @@ class LCELBaseChatbot():
         chat_history = self.chat_history
         k = self.memory_window
         
-
         if k != -1: # remembers k conversations
             memory = ConversationBufferWindowMemory(
                             chat_memory=chat_history,
