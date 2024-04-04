@@ -114,7 +114,7 @@ def initialize_states():
     if 'chain_loaded' not in st.session_state.keys():
         st.session_state['chain_loaded'] = False
     if 'llm_selected' not in st.session_state.keys():
-        st.session_state['llm_selected'] = False
+        st.session_state['llm_selected'] = True
     if 'model_choice' not in st.session_state.keys():
         st.session_state['model_choice'] = 'OpenAI (gpt-3.5-turbo)'
     if 'messages' not in st.session_state.keys():
