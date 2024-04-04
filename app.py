@@ -114,7 +114,7 @@ def initialize_states():
     if 'chain_loaded' not in st.session_state.keys():
         st.session_state['chain_loaded'] = False
     if 'llm_selected' not in st.session_state.keys():
-        st.session_state['llm_selected'] = True
+        st.session_state['llm_selected'] = False
     if 'model_choice' not in st.session_state.keys():
         st.session_state['model_choice'] = 'OpenAI (gpt-3.5-turbo)'
     if 'messages' not in st.session_state.keys():
@@ -166,7 +166,7 @@ def main():
             disabled=not st.session_state['llm_selected']
             
         )
-
+        st.markdown('If you added a new PDF mid-conversation, you have to click "Process PDFs" again to update the knowledge base.')
         st.markdown('## 3. Click Process PDFs')
         st.button('Process PDFs!', on_click=load_files_and_get_chain, key='process_button')
             
