@@ -196,10 +196,10 @@ def main():
 
 if __name__ == '__main__':
     initialize_states()
-    with st.container():
-        for k, v in st.session_state.items():
-            if k=='prompts':
-                pass
-            else:
-                st.markdown(f"{k}: {v}")
+    # with st.container():
+        # for k, v in st.session_state.items():
+        #     if k=='prompts':
+        #         pass
+        #     else:
+        #         st.markdown(f"{k}: {v}")
     main()
